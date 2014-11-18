@@ -1,7 +1,7 @@
 <?php
 // Configuration
 $DIR2RSS_SEARCH_PATTERN='/\.(txt|html?|ogg|aac|mp3|mp4|mkv|m4v|webm|wmv|mov|avi|flv|f4v)?$/i';
-$DIR2RSS_PATH=$DIR2RSS_PATH||isset($_GET['p'])?$_GET['p']:'';
+$DIR2RSS_PATH=$DIR2RSS_PATH?$DIR2RSS_PATH:(isset($_GET['p'])?$_GET['p']:'');
 ?>
 <?php
 function get_filesize($path){
