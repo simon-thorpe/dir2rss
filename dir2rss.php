@@ -1,6 +1,7 @@
 <?php
 // Configuration
-$SEARCH_PATTERN='/\.(txt|html?|ogg|aac|mp3|mp4|mkv|m4v|webm|wmv|mov|avi|flv|f4v)?$/i';
+$DIR2RSS_SEARCH_PATTERN='/\.(txt|html?|ogg|aac|mp3|mp4|mkv|m4v|webm|wmv|mov|avi|flv|f4v)?$/i';
+$DIR2RSS_PATH=$DIR2RSS_PATH||isset($_GET['p'])?$_GET['p']:'';
 ?>
 <?php
 function get_filesize($path){
@@ -93,8 +94,8 @@ function renderFile($relPath,$fullPath,$isHtml=FALSE,$parseContent=TRUE,$url=NUL
     echo "</entry>\n";
 }
 function main(){
-    global $SEARCH_PATTERN;
-    $p=isset($_GET['p'])?$_GET['p']:'';
+    global $DIR2RSS_SEARCH_PATTERN,$DIR2RSS_PATH;
+    $p=$DIR2RSS_PATH;
     if(!$p)$p='.';
     $path=realpath($p);
     $files=scandir_recursive($path,false,true);
@@ -121,7 +122,7 @@ function main(){
         
         $fullPath=$path.'/'.$relPath;
         
-        if(preg_match($SEARCH_PATTERN,$relPath)!==1){
+        if(preg_match($DIR2RSS_SEARCH_PATTERN,$relPath)!==1){
             continue;
         }
             
