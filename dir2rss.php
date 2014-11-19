@@ -32,14 +32,14 @@ function ensure_uri($path){ // Ensures the output is a full URI and not just a p
     if(preg_match('/file:\/\//',$path)){ // Is physical unix or windows path?
         $vPath=full_to_virtual_path(rawurldecode(substr($path,7)));
         if($vPath)
-            return url_encode(($_SERVER['HTTPS']?'https':'http').'://'.$_SERVER['HTTP_HOST'].$vPath);
+            return url_encode(get_scheme().'://'.$_SERVER['HTTP_HOST'].$vPath);
         else
             return '';
     }
     elseif($path[0]==='/' || preg_match('/^[A-Z]:\\\\/',$path)){ // Is physical unix or windows path?
         $vPath=full_to_virtual_path($path);
         if($vPath)
-            return url_encode(($_SERVER['HTTPS']?'https':'http').'://'.$_SERVER['HTTP_HOST'].$vPath);
+            return url_encode(get_scheme().'://'.$_SERVER['HTTP_HOST'].$vPath);
         else
             return '';
     }
@@ -93,6 +93,9 @@ function renderFile($relPath,$fullPath,$isHtml=FALSE,$parseContent=TRUE,$url=NUL
     }
     echo "</entry>\n";
 }
+function get_scheme(){
+    return (isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS'])?'https':'http';
+}
 function main(){
     global $DIR2RSS_SEARCH_PATTERN,$DIR2RSS_PATH;
     $p=$DIR2RSS_PATH;
@@ -107,9 +110,9 @@ function main(){
     echo '<?xml version="1.0" encoding="utf-8"?>'."\n";
     echo '<feed xmlns="http://www.w3.org/2005/Atom">'."\n";
     echo '<title>'.$title.'</title>'."\n";
-    echo '<id>'.($_SERVER['HTTPS']?'https':'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'</id>'."\n";
+    echo '<id>'.get_scheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'</id>'."\n";
     echo '<updated>'.date('Y-m-d\TH:i:sP',filemtime($path)).'</updated>'."\n";
-    echo '<link href="'.($_SERVER['HTTPS']?'https':'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'"></link>'."\n";
+    echo '<link href="'.get_scheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'"></link>'."\n";
     if($icon){
         echo '<logo>'.$icon.'</logo>'."\n";
         echo '<icon>'.$icon.'</icon>'."\n";
